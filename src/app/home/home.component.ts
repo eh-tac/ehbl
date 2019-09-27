@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit {
     "TC/98"
   ];
   public battle: Battle;
+  public pin: string = "9555";
   public readme: string;
   constructor(
     public electronService: ElectronService,

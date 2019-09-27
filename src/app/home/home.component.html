@@ -1,42 +1,29 @@
 <div class="container">
-  <mat-list>
-    <a
-      mat-list-item
-      href="#"
-      *ngFor="let battle of spam"
-      (click)="loadBattle(battle, $event)"
-      >TIE/{{ battle }}</a
-    >
-  </mat-list>
-  <mat-card *ngIf="battle">
-    <mat-card-title>{{ battle.name }}</mat-card-title>
-    <mat-card-subtitle>{{ battle.code }}</mat-card-subtitle>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item>
-          <h3 matLine>Missions</h3>
-          <p matLine>{{ battle.missions }}</p>
-        </mat-list-item>
-        <mat-list-item>
-          <h3 matLine>Added</h3>
-          <p matLine>{{ battle.added }}</p>
-        </mat-list-item>
-        <mat-list-item>
-          <h3 matLine>Updated</h3>
-          <p matLine>{{ battle.updated }}</p>
-        </mat-list-item>
-        <mat-list-item>
-          <h3 matLine>Creator</h3>
-          <p matLine *ngFor="let creator of battle.creators">
-            {{ creator.label }} #{{ creator.PIN }}
-          </p>
-        </mat-list-item>
-      </mat-list>
-      <pre *ngIf="readme">{{ readme }}</pre>
-    </mat-card-content>
-    <mat-card-footer>
-      <button mat-button (click)="load()">LOAD</button>
-      <button mat-button (click)="fly()">FLY</button>
-    </mat-card-footer>
-  </mat-card>
+  <div class="sidebar">
+    <ehtc-pilot *ngIf="pin" pin="{{ pin }}" class="fchg small"></ehtc-pilot>
+    <button mat-raised-button color="primary">TIE</button>
+    <button mat-raised-button color="accent">Battle Center</button>
+    <button mat-raised-button color="warn">Settings</button>
+    <button mat-raised-button color="warn">Playlist</button>
+    <mat-form-field *ngIf="!pin">
+      <input
+        matInput
+        type="number"
+        placeholder="Enter your pin"
+        [(ngModel)]="pin"
+      />
+    </mat-form-field>
+    <mat-list>
+      <a
+        mat-list-item
+        href="#"
+        *ngFor="let battle of spam"
+        (click)="loadBattle(battle, $event)"
+        >TIE/{{ battle }}</a
+      >
+    </mat-list>
+  </div>
+  <div class="main">
+    <ehtc-battle *ngIf="battle" [battle]="battle"></ehtc-battle>
+  </div>
 </div>
