@@ -1,29 +1,149 @@
-<div class="container">
-  <div class="sidebar">
+<nav class="navbar navbar-dark bg-dark">
+  <h2 class="text-center m-0 w-100">Pyrite Battle Launcher</h2>
+</nav>
+<div class="row">
+  <div class="col-md-4 sidebar m-2">
+    <small *ngIf="pin">Pilot</small>
     <ehtc-pilot *ngIf="pin" pin="{{ pin }}" class="fchg small"></ehtc-pilot>
-    <button mat-raised-button color="primary">TIE</button>
-    <button mat-raised-button color="accent">Battle Center</button>
-    <button mat-raised-button color="warn">Settings</button>
-    <button mat-raised-button color="warn">Playlist</button>
+    <small>Games</small>
+    <button
+      *ngFor="let platform of platforms"
+      class="btn btn-secondary d-flex btn-block justify-content-between align-items-center"
+      (click)="gameClick(platform)"
+    >
+      {{ platform.label }}
+      <span class="badge badge-{{ platform.badgeClass }}">{{
+        platform.badgeText
+      }}</span>
+    </button>
+    <small>Other</small>
+    <button
+      class="btn btn-lg btn-success btn-block"
+      (click)="showBattleCenter()"
+    >
+      Battle Center
+    </button>
+    <button class="btn btn-lg btn-info btn-block" (click)="showSettings()">
+      Settings
+    </button>
+    <button class="btn btn-lg btn-primary btn-block" (click)="loadSelector()">
+      Load
+    </button>
+    <button class="btn btn-lg btn-info btn-block" (click)="showAbout()">
+      About
+    </button>
     <mat-form-field *ngIf="!pin">
-      <input
-        matInput
-        type="number"
-        placeholder="Enter your pin"
-        [(ngModel)]="pin"
-      />
+      <input type="number" placeholder="Enter your pin" [(ngModel)]="pin" />
     </mat-form-field>
-    <mat-list>
-      <a
-        mat-list-item
-        href="#"
-        *ngFor="let battle of spam"
-        (click)="loadBattle(battle, $event)"
-        >TIE/{{ battle }}</a
-      >
-    </mat-list>
   </div>
-  <div class="main">
-    <ehtc-battle *ngIf="battle" [battle]="battle"></ehtc-battle>
+  <div class="col-md-7">
+    <div *ngIf="errorText" class="alert alert-dismissible alert-danger">
+      <button class="close" type="button" (click)="errorText = ''">
+        &times;
+      </button>
+      {{ errorText }}
+    </div>
+    <div *ngIf="battle">
+      <h2>Battle Center Data</h2>
+      <ehtc-battle [battle]="battle"></ehtc-battle>
+    </div>
+    <div *ngIf="platform" class="card border-primary m-4 p-2">
+      <div class="card-header bg-primary">{{ platform.label }}</div>
+      <div class="card-body">
+        <div *ngIf="platform.loaded">
+          <p class="lead">{{ platform.battle.name }} is loaded</p>
+        </div>
+        <button class="btn btn-success" (click)="launch(platform)">
+          Launch
+        </button>
+      </div>
+    </div>
+    <div *ngIf="about" class="card border-primary m-4 p-2">
+      <div class="card-header bg-primary">About</div>
+      <div class="card-body">
+        <p class="lead">
+          The Pyrite Battle Launcher was created by Pickled Yoda
+        </p>
+        <p>
+          It can install battles for X-Wing, TIE, XvT, BoP, XWA and SWGB from
+          ZIP files or Emperor's Hammer Mission (.ehm) files
+        </p>
+        <p>
+          <small
+            >It's an Angular 8 web app packaged with Electron. The design is
+            bootstrap, themed with bootswatch.com/superhero</small
+          >
+        </p>
+      </div>
+    </div>
+    <div *ngIf="battleCenter" class="settings card border-primary m-4 p-2">
+      <div class="card-header bg-primary">Battle Center</div>
+      <div class="card-body">
+        <ehtc-battle-center
+          (downloadBattle)="downloadBattle($event)"
+        ></ehtc-battle-center>
+      </div>
+    </div>
+    <div *ngIf="settings" class="settings card border-primary m-4 p-1">
+      <div class="card-header bg-primary">Settings</div>
+      <div class="card-body">
+        <fieldset>
+          <legend>Game Directories</legend>
+          <div *ngFor="let platform of platforms" class="form-group">
+            <label class="form-control-label">{{ platform.label }}</label>
+            <div class="input-group">
+              <textarea
+                class="form-control small {{
+                  platform.ready ? 'is-valid' : 'is-invalid'
+                }}"
+                placeholder="Path to game directory"
+                readonly
+                >{{ platform.installer.rootDir }}</textarea
+              >
+              <div class="input-group-append">
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  (click)="findPlatform(platform)"
+                >
+                  Change
+                </button>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Options</legend>
+          <div class="form-group">
+            <label>TIE Corps PIN</label>
+            <input
+              class="form-control"
+              type="number"
+              placeholder="TIE Corps PIN"
+              [value]="pin"
+              (input)="setPin($event)"
+            />
+            <small class="form-text text-muted"
+              >Your PIN is used to create pilot files and other fancy
+              stuff</small
+            >
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input
+                class="custom-control-input"
+                id="createPilots"
+                type="checkbox"
+                checked=""
+              />
+              <label class="custom-control-label" for="createPilots"
+                >Create pilot file when a battle is installed</label
+              >
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
   </div>
 </div>
+<input type="file" id="fileSelector" #fileSelector />

@@ -29,7 +29,7 @@
                 "output": "./assets"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": ["src/assets/superhero.min.css", "src/styles.scss"],
             "scripts": []
           },
           "configurations": {

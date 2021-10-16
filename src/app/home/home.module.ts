@@ -1,10 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatListModule } from "@angular/material/list";
-import { MatCardModule } from "@angular/material/card";
-import { MatInputModule } from "@angular/material/input";
-import { MatButtonModule } from "@angular/material/button";
 
 import { HomeRoutingModule } from "./home-routing.module";
 
@@ -17,10 +13,6 @@ import { FormsModule } from "@angular/forms";
   imports: [
     CommonModule,
     BrowserAnimationsModule,
-    MatListModule,
-    MatCardModule,
-    MatButtonModule,
-    MatInputModule,
     SharedModule,
     FormsModule,
     HomeRoutingModule
